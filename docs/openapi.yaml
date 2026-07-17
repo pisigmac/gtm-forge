@@ -1,0 +1,243 @@
+openapi: 3.1.0
+info:
+  title: gtm-forge API
+  version: 0.1.0
+paths:
+  /health:
+    get:
+      summary: Health
+      operationId: health_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  type: string
+                type: object
+                title: Response Health Health Get
+  /costs/summary:
+    get:
+      summary: Costs Summary
+      operationId: costs_summary_costs_summary_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Costs Summary Costs Summary Get
+  /skills/growth/analyze:
+    post:
+      summary: Growth Analyze
+      operationId: growth_analyze_skills_growth_analyze_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalyzeRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Growth Analyze Skills Growth Analyze Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /skills/outbound/score:
+    post:
+      summary: Outbound Score
+      operationId: outbound_score_skills_outbound_score_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScoreRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Outbound Score Skills Outbound Score Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /skills/seo/cannibalize:
+    post:
+      summary: Seo Cannibalize
+      operationId: seo_cannibalize_skills_seo_cannibalize_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CannibalizeRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Seo Cannibalize Skills Seo Cannibalize Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /skills/content-eval/run:
+    post:
+      summary: Content Eval Run
+      operationId: content_eval_run_skills_content_eval_run_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EvalRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Content Eval Run Skills Content Eval Run Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    AnalyzeRequest:
+      properties:
+        control:
+          items:
+            type: number
+          type: array
+          minItems: 2
+          title: Control
+        treatment:
+          items:
+            type: number
+          type: array
+          minItems: 2
+          title: Treatment
+        alpha:
+          type: number
+          title: Alpha
+          default: 0.05
+        n_boot:
+          type: integer
+          title: N Boot
+          default: 5000
+        seed:
+          type: integer
+          title: Seed
+          default: 42
+      type: object
+      required:
+      - control
+      - treatment
+      title: AnalyzeRequest
+    CannibalizeRequest:
+      properties:
+        pages:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Pages
+        threshold:
+          type: number
+          title: Threshold
+          default: 0.6
+      type: object
+      required:
+      - pages
+      title: CannibalizeRequest
+    EvalRequest:
+      properties:
+        idea:
+          type: string
+          title: Idea
+        context:
+          type: string
+          title: Context
+          default: ''
+        gate:
+          type: integer
+          title: Gate
+          default: 90
+      type: object
+      required:
+      - idea
+      title: EvalRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ScoreRequest:
+      properties:
+        lead:
+          additionalProperties:
+            type: string
+          type: object
+          title: Lead
+        icp:
+          additionalProperties: true
+          type: object
+          title: Icp
+      type: object
+      required:
+      - lead
+      title: ScoreRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
